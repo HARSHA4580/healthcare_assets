@@ -10,10 +10,11 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Install Databricks CLI
-        run: pip install databricks-cli
+        run: |
+          curl -fsSL https://raw.githubusercontent.com/databricks/setup-cli/main/install.sh | sh
 
       - name: Configure Databricks
         run: |
@@ -22,8 +23,11 @@ jobs:
           ${{ secrets.DATABRICKS_TOKEN }}
           EOF
 
+      - name: Validate Bundle
+        run: databricks bundle validate --target dev
+
       - name: Deploy Bundle
-        run: databricks bundle deploy
+        run: databricks bundle deploy --target dev
 
       - name: Run Job
-        run: databricks bundle run --no-wait
+        run: databricks bundle run --target dev --no-wait
