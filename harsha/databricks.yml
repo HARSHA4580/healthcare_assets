@@ -17,10 +17,13 @@ targets:
     default: true
     workspace:
       host: https://dbc-694533b1-7860.cloud.databricks.com
-      root_path: /Workspace/Shared/${workspace.current_user.userName}/.bundle/${bundle.name}/${bundle.target}   # ✅ FINAL FIX
+      root_path: /Workspace/Shared/${workspace.current_user.userName}/.bundle/${bundle.name}/${bundle.target}
     variables:
       catalog: workspace
       schema: ${workspace.current_user.short_name}
+    permissions:
+      - group_name: users        # 🔥 THIS IS THE REAL FIX
+        level: CAN_MANAGE
 
   prod:
     mode: production
@@ -31,5 +34,7 @@ targets:
       catalog: workspace
       schema: prod
     permissions:
+      - group_name: users        # 🔥 ADD HERE ALSO
+        level: CAN_MANAGE
       - user_name: harshavardhanchari0304@gmail.com
         level: CAN_MANAGE
